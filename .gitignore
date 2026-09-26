@@ -1,0 +1,17 @@
+venv/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+embeddings/
+
+.ipynb_checkpoints/
+
+.vscode/
+
+.env
+
+.DS_Store
+Thumbx.db
