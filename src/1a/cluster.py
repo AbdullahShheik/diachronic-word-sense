@@ -6,13 +6,15 @@ from pathlib import Path
 
 import numpy as np
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
 
 #Config
 USAGES_EMB_DIR  = "embeddings/SV/usages"
 OUTPUT_DIR      = "outputs/SV"
 LANG            = "SV"
-N_CLUSTERS      = 3
+MIN_K           = 2
+MAX_K           = 8
 RANDOM_STATE    = 42
 
 
@@ -22,10 +24,34 @@ def load_embeddings(word):
         return pickle.load(f)
 
 
-def cluster_word(word_data, n_clusters=N_CLUSTERS):
+def find_best_k(embeddings, min_k=MIN_K, max_k=MAX_K):
+    best_k     = min_k
+    best_score = -1
+
+    for k in range(min_k, min(max_k + 1, len(embeddings))):
+        kmeans = KMeans(n_clusters=k, random_state=RANDOM_STATE, n_init=10)
+        labels = kmeans.fit_predict(embeddings)
+
+        if len(set(labels)) < 2:
+            continue
+
+        #Silhouette score
+        score = silhouette_score(embeddings, labels)
+
+        if score > best_score:
+            best_score = score
+            best_k     = k
+
+    return best_k, best_score
+
+
+def cluster_word(word_data):
     embeddings = np.array([entry["embedding"] for entry in word_data])
 
-    kmeans = KMeans(n_clusters=n_clusters, random_state=RANDOM_STATE, n_init=10)
+    best_k, best_score = find_best_k(embeddings)
+    print(f"  Best k={best_k} (silhouette={best_score:.4f})")
+
+    kmeans = KMeans(n_clusters=best_k, random_state=RANDOM_STATE, n_init=10)
     labels = kmeans.fit_predict(embeddings)
 
     return labels
@@ -61,9 +87,9 @@ def main():
                 "label"        : [int(label)]
             })
 
-        print(f"  {len(word_data)} usages → {N_CLUSTERS} clusters")
+        print(f"  {len(word_data)} usages → {len(set(labels))} clusters")
 
-    # Save JSONL
+    # Save JSONL with correct naming convention
     jsonl_filename = f"{LANG}_subtask1.jsonl"
     jsonl_path     = os.path.join(OUTPUT_DIR, jsonl_filename)
 
