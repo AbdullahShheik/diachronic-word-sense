@@ -1,0 +1,34 @@
+{
+  "results": {
+    "subtask1a": {
+      "SV": {
+        "precision": 0.5821315581389361,
+        "recall": 0.7075819202689326,
+        "fcubed": 0.6155025788852301
+      },
+      "average": {
+        "precision": 0.5821315581389361,
+        "recall": 0.7075819202689326,
+        "fcubed": 0.6155025788852301
+      }
+    },
+    "subtask1b": {
+      "SV": 0.40967320767045723,
+      "average": 0.40967320767045723
+    },
+    "subtask2": {}
+  },
+  "errors": [],
+  "logs": [
+    {
+      "level": "info",
+      "message": "Found 1 files in submission."
+    },
+    {
+      "level": "info",
+      "language": "SV",
+      "subtask": "subtask1",
+      "message": "Evaluation completed successfully."
+    }
+  ]
+}
