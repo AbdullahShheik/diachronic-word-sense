@@ -7,6 +7,8 @@ __pycache__/
 
 embeddings/
 
+submission_extracted/
+
 .ipynb_checkpoints/
 
 .vscode/
