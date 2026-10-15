@@ -16,4 +16,6 @@ submission_extracted/
 .env
 
 .DS_Store
-Thumbx.db
+Thumbs.db
+
+evaluation_results.json
